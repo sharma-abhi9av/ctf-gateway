@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTF Gateway</title>
+  <style>
+    /* Basic reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { 
+      height: 100%;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0d1117, #131a22, #0b0c10, #00100f);
+      background-size: 400% 400%;
+      animation: bgAnimation 15s ease infinite;
+      color: #48f742;
+      position: relative;
+    }
+    @keyframes bgAnimation {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    /* Floating objects */
+    .floating-object {
+      position: absolute;
+      border: 2px solid #48f742;
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: rotate360 10s linear infinite, moveAround 20s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    @keyframes rotate360 { from { transform: rotate(0deg); } to { transform: rotate(360deg); }}
+    @keyframes moveAround {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(300px, 50px); }
+      50% { transform: translate(150px, 200px); }
+      75% { transform: translate(-100px, 150px); }
+      100% { transform: translate(0, 0); }
+    }
+    /* Different sizes and positions */
+    .floating-object:nth-child(1) { width: 60px; height: 60px; top: 10%; left: 15%; animation-duration: 12s, 25s; }
+    .floating-object:nth-child(2) { width: 100px; height: 100px; top: 30%; left: 75%; animation-duration: 15s, 30s; }
+    .floating-object:nth-child(3) { width: 80px; height: 80px; top: 60%; left: 25%; animation-duration: 10s, 20s; }
+    .floating-object:nth-child(4) { width: 120px; height: 120px; top: 70%; left: 60%; animation-duration: 18s, 35s; }
+    .floating-object:nth-child(5) { width: 50px; height: 50px; top: 20%; left: 50%; animation-duration: 14s, 28s; }
+    .floating-object:nth-child(6) { width: 90px; height: 90px; top: 50%; left: 40%; animation-duration: 11s, 22s; }
+    .floating-object:nth-child(7) { width: 70px; height: 70px; top: 80%; left: 20%; animation-duration: 13s, 26s; }
+    .floating-object:nth-child(8) { width: 110px; height: 110px; top: 40%; left: 80%; animation-duration: 16s, 32s; }
+    
+    /* Watermark */
+    #watermark {
+      position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 15rem;
+      color: rgba(255,255,255,0.05);
+      white-space: nowrap;
+      pointer-events: none;
+      animation: watermarkFade 5s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+    @keyframes watermarkFade { from { opacity: 0.03; } to { opacity: 0.08; } }
+    
+    #container { 
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 100%; padding: 0 1rem; position: relative; z-index: 2;
+    }
+    /* Entry animation */
+    #logo { font-size: 4rem; font-weight: bold; opacity: 0; animation: fadeIn 2s ease forwards; text-shadow: 0 0 10px #48f742; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    #subtitle { margin-top: 1rem; font-size: 1.5rem; opacity: 0;
+      animation: slideUp 1.5s ease forwards 1s; text-shadow: 0 0 5px #48f742; }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    /* Category grid */
+    #categories { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:1rem;
+      width:80%; max-width:600px; margin-top:2.5rem; opacity:0; animation:fadeIn 1s forwards 2.5s; }
+    .card { background: rgba(36,40,47,0.8); border:1px solid #48f742; border-radius:8px;
+      padding:1rem; text-align:center; cursor:pointer; transition:transform 0.2s, background 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: scale(1.05); background: rgba(36,40,47,1); box-shadow: 0 0 10px #48f742; }
+    .card h3 { margin-bottom:0.5rem; font-size:1.2rem; color:#48f742; }
+    .card p { font-size:0.9rem; color:#a3ffc1; }
+    /* Footer */
+    footer { position:absolute; bottom:20px; width:100%; text-align:center;
+      font-size:1rem; opacity:0.8; color:#48f742; z-index:2; }
+  </style>
+</head>
+<body>
+  <!-- Multiple floating circles -->
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  <div class="floating-object"></div>
+  
+  <div id="watermark">p2p academy</div>
+  <div id="container">
+    <div id="logo">P2P Academy</div>
+    <div id="subtitle">Prove your skills. Get access.</div>
+    <div id="categories">
+      <div class="card" data-challenge="web"><h3>Web</h3><p>Basic web hacking</p></div>
+      <div class="card" data-challenge="forensics"><h3>Forensics</h3><p>Metadata & data recovery</p></div>
+      <div class="card" data-challenge="crypto"><h3>Crypto</h3><p>Simple ciphers</p></div>
+      <div class="card" data-challenge="osint"><h3>OSINT</h3><p>Find the hidden</p></div>
+      <div class="card" data-challenge="stego"><h3>Stego</h3><p>Hidden in plain sight</p></div>
+    </div>
+  </div>
+  <footer>- Mikey | Discord: abhinav005</footer>
+  <script>
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        window.location.href = `${card.getAttribute('data-challenge')}.html`;
+      });
+    });
+  </script>
+</body>
+</html>
